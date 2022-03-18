@@ -5,3 +5,8 @@ zsh/functions/todos
 zsh/hidden_exports
 zsh/uncommittable_aliases
 zsh/notes
+
+neovim/undodir/
+neovim/.netrwhist
+neovim/plugged/
+neovim/autoload/plug.vim
