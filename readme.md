@@ -88,6 +88,6 @@ shasum -a 256 blah.tar.gz
 
 ## Shell
 ### zsh
--[] Figure out better alias strategy (move what's currently in zshrc)
+- [] Figure out better alias strategy (move what's currently in zshrc)
 
 
