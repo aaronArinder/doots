@@ -4,15 +4,6 @@
   programs.alacritty = {
     enable = true;
     settings = {
-      #env: "xterm-256-color"
-      window = {
-        decoration = "none";
-        # ternary on darwin for yabai/spacebar
-        #  padding = {
-        #    x: 10
-        #    y: 10
-        #  };
-      };
 
       background_opacity = 1.00;
       cursor = {
@@ -20,7 +11,7 @@
       };
 
       font = {
-        size = 10;
+        size = 8;
         use_thin_strokes = true;
       };
 
