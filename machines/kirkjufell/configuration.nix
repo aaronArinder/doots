@@ -62,38 +62,49 @@ in
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
 
+  programs.zsh.enable = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
-   users.users.aaron = {
-     isNormalUser = true;
-     extraGroups = [
+  users.users.aaron = {
+    isNormalUser = true;
+    shell = pkgs.zsh;
+
+    extraGroups = [
       "wheel"
       "audio"
       # adding docker to user's extraGroups is equivalent to running as root
       "docker"
       "networkmanager"
     ];
-   };
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-   environment.systemPackages = with pkgs; [
-     unstable.neovim
-     curl
-     git
-     i3
-     alacritty
-     zsh
-     bash
-     pulseaudio
-     docker
-     wget
-     brave
-     stow
-     kubectl
-   ];
+  environment.systemPackages = with pkgs; [
+    unstable.neovim
+    curl
+    git
+    i3
+    alacritty
+    zsh
+    bash
+    pulseaudio
+    docker
+    wget
+    brave
+    stow
+    kubectl
+    # necessary for neovim's clipboard use
+    xclip
+  ];
 
 
   environment.pathsToLink = [ "/share/zsh" ];
+
+  environment.sessionVariables = {
+    TERMINAL = "alacritty";
+
+  };
 
   fonts.fonts = with pkgs; [
     nerdfonts
