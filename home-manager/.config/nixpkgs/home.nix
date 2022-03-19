@@ -1,11 +1,11 @@
 { config, pkgs, ... }:
 
 {
-
   imports = [
     ./configs/alacritty.nix
     ./configs/git.nix
     ./configs/zsh.nix
+    ./configs/i3.nix
   ];
 
   home.username = "aaron";

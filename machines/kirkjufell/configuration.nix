@@ -6,7 +6,7 @@
 
 # Define `unstable` for installing certain packages (e.g., neovim)
 let
-  unstable = import <unstable> {};
+  unstable = import <unstable> { };
 in
 {
   imports =
