@@ -1,7 +1,6 @@
 { pkgs, ... }:
 
 {
-
   programs.zsh = {
     enable = true;
     enableAutosuggestions = true;
@@ -21,6 +20,8 @@
       ];
     };
 
+    # these might need to be set in configuration.nix; don't seem
+    # to be picking up
     localVariables = {
       EDITOR = "nvim";
       DISABLE_KUBE_PS1 = true;
