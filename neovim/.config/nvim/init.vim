@@ -89,7 +89,6 @@ let mapleader = " "
 lua require'lspconfig'.tsserver.setup{}
 lua require'rust-tools'.setup{}
 lua require'lspconfig'.terraformls.setup{}
-lua require'lspconfig'.rnix.setup{}
 lua require'lspconfig'.sumneko_lua.setup{}
 lua require'nvim-tree'.setup {}
 lua require'nvim-web-devicons'.setup {}
