@@ -21,6 +21,8 @@
     pkgs.nodejs-17_x
     # nix formatter
     pkgs.nixpkgs-fmt
+    # backlight brightness via i3
+    pkgs.brightnessctl
   ];
 
   home.stateVersion = "21.11";
