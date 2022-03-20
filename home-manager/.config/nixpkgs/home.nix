@@ -6,6 +6,7 @@
     ./configs/git.nix
     ./configs/zsh.nix
     ./configs/i3.nix
+    ./configs/polybar.nix
   ];
 
   home.username = "aaron";
