@@ -1,26 +1,32 @@
-# Setup
-## Git/GitHub
+## Overview
 
-Generate an ssh key and copy/paste its pub to GitHub. If the default shell doesn't easily copy/paste, just open alacritty (should be available if you're on a nixOS system using one of the nixOS configs).
+This repo uses a mixed strategy for handling dots and configuration across systems. Everything that can sensibly be put into nix configuration lives in either `/machines` (for per-system base configuration) or `/home-manager` (for user configuration).
+
+For any configuration not managed with nix, `stow` is used to create symlinks.
+
+## Stow
+
+The `setup.sh` is WIP; so:
 
 ```
-ssh-keygen -t NAME_HERE -b 4096 -C "aaronarinder@protonmail.com"
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_NAME_HERE
+stow --target=$HOME neovim
+sudo stow --target=/etc/nixos machines/<machine>
 ```
-
--[] config for not having to always set default branch named (git config --global init.defaultBranch trunk)
 
 ## Nix
 
-There isn't great LSP/formatting support in neovim yet; so, use the following to format:
+### General
+
+There isn't great LSP/formatting support in neovim yet; so, use the following to format files:
 
 ```
 nixpkgs-fmt ./path/to/file
 ```
 
 ### `/etc/nixos/configuration`
-### Unstable channel
+
+### Adding unstable channel
+
 Some packages need to come from the unstable channel (e.g., as of writing, neovim v0.6). Make the unstable channel available system-wide:
 
 ```
@@ -60,34 +66,21 @@ in
 ```
 
 ### Home manager
+
 #### Installation
+
 Install [home-manager](https://nix-community.github.io/home-manager/index.html#sec-install-standalone)
 
-If `NIX_ENV` isn't available, get it into the current session using:
-
-```
-export NIX_PATH=$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels${NIX_PATH:+:$NIX_PATH}
-. ~/.nix-profile/etc/profile.d/hm-session-vars.sh
-```
-
 #### Configuration
+
 `man home-configuration.nix`
 
-#### Generating sha256
+## TODOs
 
-For home-manager packages (e.g., from GitHub), generate the sha256 by grabbing the tar and:
-
-```
-sha256sum blah.tar.gz
-```
-or
-```
-shasum -a 256 blah.tar.gz
-
-```
-
-## Shell
 ### zsh
-- [] Figure out better alias strategy (move what's currently in zshrc)
 
+-   [ ] Figure out better alias strategy (move what's currently in zshrc)
 
+### home-manager
+
+-   [ ] Figure out how to modularize users across machines (need macOS/nix variants)
