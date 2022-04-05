@@ -71,7 +71,8 @@ in
 
         modules-left = "distro-icon dulS ddrT i3 dulT";
         modules-center = "title";
-        modules-right = "durT audio ddlT date";
+
+        modules-right = "durS pt ddlS durT audio ddlT date";
 
         locale = "en_US.UTF-8";
       };
@@ -135,6 +136,21 @@ in
         interval = 999999999;
 
         format = " <label>";
+        format-foreground = quaternary;
+        format-background = secondary;
+        format-padding = 1;
+        label = "%output%";
+        label-font = 2;
+      };
+
+      "module/pt" = {
+        type = "custom/script";
+
+        exec =
+          "$HOME/.cargo/bin/pt -p | /run/current-system/sw/bin/sed -e 's/^\"//' -e 's/\"$//'";
+        interval = 1;
+
+        format = "<label>";
         format-foreground = quaternary;
         format-background = secondary;
         format-padding = 1;
