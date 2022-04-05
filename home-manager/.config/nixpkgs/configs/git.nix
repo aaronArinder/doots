@@ -21,6 +21,10 @@
         defaultBranch = "trunk";
       };
 
+      pull = {
+        rebase = false;
+      };
+
       help = {
         autocorrect = 1;
       };
