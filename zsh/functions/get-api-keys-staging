@@ -1,0 +1,11 @@
+#!/bin/bash
+function quit {
+   exit
+}
+
+function get_api_keys {
+aws apigateway get-api-keys --include-values --profile staging | jq -c '.[]' | sed 's/\\[tn]//g' | jq -c ".[] | select(.value | contains(\""$1"\"))" | jq
+}
+
+get_api_keys $1
+exit 0

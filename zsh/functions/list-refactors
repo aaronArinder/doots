@@ -1,0 +1,5 @@
+total=$(git grep -o '@refactor' | wc -l | tr -d '[:space:]')
+date_counted=$(date '+%m-%d-%y')
+echo "$date_counted :: $total" >> ~/zsh/functions/refactors
+
+echo "Total @refactors: $total"

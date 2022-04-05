@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# example usage, removing logs from javascript files:
+# u_find-and-replace '*.js' 'console.log(.*);*' ''
+
+function quit {
+   exit
+}
+
+function find_and_replace {
+    # -type f === regular file
+    # -iname === case-insensitive match for filename
+    # -print0 === prints all on one line
+    # xargs 0 === constrauct arg list, -0 to separate via null char
+    # sed -i === edit files in-place
+    # -e "s/$2/$2/g" === execute regex
+    find . -type f -iname "$1" -print0 | xargs -0 sed -i '' -e "s/$2/$3/g"
+}
+
+find_and_replace $1 $2 $3
+exit 0

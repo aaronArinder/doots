@@ -1,0 +1,12 @@
+#!/bin/bash
+function quit {
+   exit
+}
+
+# remove node_modules across packages
+function remove-node-modules {
+    find . -type d -name "node_modules" -exec rm -r {} +
+}
+
+remove-node-modules
+exit 0

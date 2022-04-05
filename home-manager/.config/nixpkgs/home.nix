@@ -12,6 +12,9 @@
   home.username = "aaron";
   home.homeDirectory = "/home/aaron";
 
+  nixpkgs.config = {
+    allowUnfree = true;
+  };
 
   home.packages = [
     pkgs.alacritty
@@ -19,6 +22,7 @@
     pkgs.zsh
     pkgs.oh-my-zsh
     pkgs.nodejs-17_x
+    pkgs.discord
     # nix formatter
     pkgs.nixpkgs-fmt
     # backlight brightness via i3

@@ -1,0 +1,13 @@
+#!/bin/bash
+function quit {
+   exit
+}
+
+function types_from_schema {
+    apollo client:codegen \
+    --endpoint $1 \
+    --target typescript
+}
+
+types_from_schema $1
+exit 0

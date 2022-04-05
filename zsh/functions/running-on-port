@@ -1,0 +1,5 @@
+#!/bin/bash
+
+lsof -i :$1
+exit 0
+
