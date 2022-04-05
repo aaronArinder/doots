@@ -29,6 +29,8 @@
     pkgs.brightnessctl
   ];
 
+  home.sessionPath = [ "$HOME/.cargo/bin" ];
+
   home.stateVersion = "21.11";
 
   # Let Home Manager install and manage itself.
