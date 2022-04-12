@@ -19,6 +19,10 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Use latest kernel: `nix repl`, then `:l <nixpkgs>`, then `pkgs.linuxPackages` to
+  # list kernel versions
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   networking.hostName = "kirkjufell"; # Define your hostname.
 
   #networking.wireless.enable = true;
