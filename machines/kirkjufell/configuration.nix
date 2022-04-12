@@ -67,6 +67,7 @@ in
   services.xserver.libinput.enable = true;
 
   programs.zsh.enable = true;
+  virtualisation.docker.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.aaron = {
@@ -81,6 +82,7 @@ in
       "networkmanager"
     ];
   };
+
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
