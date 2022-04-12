@@ -44,6 +44,11 @@ let g:prettier#autoformat = 1
 let g:prettier#autoformat_require_pragma = 0
 let g:prettier#exec_cmd_async = 1
 
+" rust
+let g:rustfmt_fail_silently = 0
+let g:rustfmt_options = 'overwrite'
+let g:rustfmt_autosave = 1
+
 syntax enable
 filetype plugin indent on
 
@@ -54,12 +59,6 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/playground'
 Plug 'neovim/nvim-lspconfig'
-
-" rust tooling
-Plug 'simrat39/rust-tools.nvim'
-"" debugging
-Plug 'nvim-lua/plenary.nvim'
-Plug 'mfussenegger/nvim-dap'
 
 Plug 'nvim-lua/lsp_extensions.nvim'
 Plug 'nvim-lua/completion-nvim'
@@ -87,7 +86,7 @@ highlight! link SignColumn LineNr
 let mapleader = " "
 
 lua require'lspconfig'.tsserver.setup{}
-lua require'rust-tools'.setup{}
+lua require'lspconfig'.rust_analyzer.setup{}
 lua require'lspconfig'.terraformls.setup{}
 lua require'lspconfig'.sumneko_lua.setup{}
 lua require'nvim-tree'.setup {}
@@ -133,6 +132,8 @@ augroup DEFAULT_GROUP
     autocmd!
     autocmd BufWritePre * :call TrimWhitespace()
     "autocmd CursorHold * lua vim.lsp.util.show_line_diagnostics()
-    autocmd BufWritePre *.rs lua vim.lsp.buf.formatting_sync(nil, 200)
+    " pretty long timeout (10s), but sometimes language servers take a bit to
+    " spin up
+    autocmd BufWritePre *.rs lua vim.lsp.buf.formatting_sync(nil, 10000)
 augroup END
 
