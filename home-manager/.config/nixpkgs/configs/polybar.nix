@@ -72,7 +72,7 @@ in
         modules-left = "distro-icon dulS ddrT i3 dulT";
         modules-center = "title";
 
-        modules-right = "durS pt ddlS durT audio ddlT date";
+        modules-right = "durS pt-t ddlS durS pt-p ddlS durT audio ddlT date";
 
         locale = "en_US.UTF-8";
       };
@@ -143,7 +143,21 @@ in
         label-font = 2;
       };
 
-      "module/pt" = {
+      "module/pt-t" = {
+        type = "custom/script";
+
+        exec = "/run/current-system/sw/bin/cat $HOME/.productivity-timer/tag";
+        interval = 1;
+
+        format = "<label>";
+        format-foreground = quaternary;
+        format-background = secondary;
+        format-padding = 1;
+        label = "%output%";
+        label-font = 2;
+      };
+
+      "module/pt-p" = {
         type = "custom/script";
 
         exec =
