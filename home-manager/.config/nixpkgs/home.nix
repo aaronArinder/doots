@@ -18,17 +18,18 @@
     allowUnfree = true;
   };
 
-  home.packages = [
-    pkgs.alacritty
-    pkgs.htop
-    pkgs.zsh
-    pkgs.oh-my-zsh
-    pkgs.nodejs-17_x
-    pkgs.discord
+  home.packages = with pkgs; [
+    alacritty
+    htop
+    zsh
+    oh-my-zsh
+    nodejs-17_x
+    discord
     # nix formatter
-    pkgs.nixpkgs-fmt
+    nixpkgs-fmt
     # backlight brightness via i3
-    pkgs.brightnessctl
+    brightnessctl
+    k9s
   ];
 
   home.sessionPath = [ "$HOME/.cargo/bin" ];
