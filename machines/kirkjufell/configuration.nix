@@ -102,6 +102,8 @@ in
     kubectl
     # necessary for neovim's clipboard use
     xclip
+    ripgrep
+    gcc
   ];
 
 
