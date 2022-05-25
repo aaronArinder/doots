@@ -85,7 +85,7 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 " snippet completion source for nvim-cmp
 Plug 'hrsh7th/cmp-vsnip'
-" other usefull completion sources
+" other useful completion sources
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-buffer'
 " enables more of the features of rust-analyzer
@@ -203,11 +203,7 @@ cmp.setup({
 })
 EOF
 
-
-
-
 lua require'lspconfig'.tsserver.setup{}
-"lua require'lspconfig'.rust_analyzer.setup{}
 lua require'lspconfig'.terraformls.setup{}
 lua require'lspconfig'.sumneko_lua.setup{}
 lua require'nvim-tree'.setup {}
