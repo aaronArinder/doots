@@ -30,6 +30,7 @@
     # backlight brightness via i3
     brightnessctl
     k9s
+    zoom-us
   ];
 
   home.sessionPath = [ "$HOME/.cargo/bin" ];
