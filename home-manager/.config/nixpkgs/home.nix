@@ -20,6 +20,7 @@
 
   home.packages = with pkgs; [
     alacritty
+    arandr
     htop
     zsh
     oh-my-zsh
@@ -31,6 +32,7 @@
     brightnessctl
     k9s
     zoom-us
+    spotify
   ];
 
   home.sessionPath = [ "$HOME/.cargo/bin" ];
