@@ -78,6 +78,12 @@ stow --target $HOME home-manager
 
 - Install [home-manager](https://nix-community.github.io/home-manager/index.html#sec-install-standalone)
 - Stow: `nix-env -iA nixpkgs.stow`
+- [vim-plug](https://github.com/junegunn/vim-plug) is required, and I haven't found a good way of installing it without putting the config into home-manager (which I want to avoid so I can use it without home-manager and outside of nixOS): 
+
+```
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+```
 
 #### Configuration
 
