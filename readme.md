@@ -6,11 +6,18 @@ For any configuration not managed with nix, `stow` is used to create symlinks.
 
 ## Stow
 
-The `setup.sh` is WIP; so:
+The `setup.sh` is WIP. For machine-wide configurations:
 
 ```
-stow --target=$HOME neovim
 sudo stow --target=/etc/nixos machines/<machine>
+```
+
+And for home-manager, first remove the auto-generated `home.nix` and then `stow` the doots version:
+
+```
+rm ~/.config/nixpkgs/home.nix
+cd doots
+stow --target $HOME home-manager
 ```
 
 ## Nix
