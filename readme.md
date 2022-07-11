@@ -4,22 +4,6 @@ This repo uses a mixed strategy for handling dots and configuration across syste
 
 For any configuration not managed with nix, `stow` is used to create symlinks.
 
-## Stow
-
-The `setup.sh` is WIP. For machine-wide configurations:
-
-```
-sudo stow --target=/etc/nixos machines/<machine>
-```
-
-And for home-manager, first remove the auto-generated `home.nix` and then `stow` the doots version:
-
-```
-rm ~/.config/nixpkgs/home.nix
-cd doots
-stow --target $HOME home-manager
-```
-
 ## Nix
 
 ### General
@@ -34,7 +18,7 @@ nixpkgs-fmt ./path/to/file
 
 ### Adding unstable channel
 
-Some packages need to come from the unstable channel (e.g., as of writing, neovim v0.6). Make the unstable channel available system-wide:
+Some packages need to come from the unstable channel (e.g., as of writing, neovim v0.6). You must do this for `home-manager` to work correctly. Make the unstable channel available system-wide:
 
 ```
 sudo nix-channel --add https://nixos.org/channels/nixpkgs-unstable unstable
@@ -72,6 +56,22 @@ in
 };
 ```
 
+## Stow
+
+The `setup.sh` is WIP. For machine-wide configurations:
+
+```
+sudo stow --target=/etc/nixos machines/<machine>
+```
+
+And for home-manager (see the `home-manager` section first), first remove the auto-generated `home.nix` and then `stow` the doots version:
+
+```
+rm ~/.config/nixpkgs/home.nix
+cd doots
+stow --target $HOME home-manager
+```
+
 ### Home manager
 
 #### Installation
@@ -82,6 +82,13 @@ in
 #### Configuration
 
 `man home-configuration.nix`
+
+## Troubleshooting
+### `error: file 'nixpkgs' was not found in the Nix search path (add it using $NIX_PATH or -I)`
+```
+nix-channel --add https://nixos.org/channels/nixos-22.05 nixpkgs
+nix-channel --update
+```
 
 ## TODOs
 
