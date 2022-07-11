@@ -69,7 +69,8 @@ in
 
 #### Installation
 
-Install [home-manager](https://nix-community.github.io/home-manager/index.html#sec-install-standalone)
+- Install [home-manager](https://nix-community.github.io/home-manager/index.html#sec-install-standalone)
+- Stow: `nix-env -iA nixpkgs.stow`
 
 #### Configuration
 
