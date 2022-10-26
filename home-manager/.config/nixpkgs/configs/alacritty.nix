@@ -5,13 +5,34 @@
     enable = true;
     settings = {
 
-      background_opacity = 1.00;
+      window = {
+        opacity = 1.00;
+      };
+
       cursor = {
         style = "Block";
       };
 
       font = {
-        size = 8;
+        normal = {
+          family = "Fira Code";
+          style = "Regular";
+        };
+
+        bold = {
+          family = "Fira Code";
+          style = "Bold";
+        };
+
+        italic = {
+          family = "Menlo";
+          style = "Italic";
+        };
+
+
+        size = 13;
+
+        # suitable for retina displays
         use_thin_strokes = true;
       };
 
