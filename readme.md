@@ -4,15 +4,6 @@ This repo uses a mixed strategy for handling dots and configuration across syste
 
 For any configuration not managed with nix, `stow` is used to create symlinks.
 
-## Stow
-
-The `setup.sh` is WIP; so:
-
-```
-stow --target=$HOME neovim
-sudo stow --target=/etc/nixos machines/<machine>
-```
-
 ## Nix
 
 ### General
@@ -27,7 +18,7 @@ nixpkgs-fmt ./path/to/file
 
 ### Adding unstable channel
 
-Some packages need to come from the unstable channel (e.g., as of writing, neovim v0.6). Make the unstable channel available system-wide:
+Some packages need to come from the unstable channel (e.g., as of writing, neovim v0.6). You must do this for `home-manager` to work correctly. Make the unstable channel available system-wide:
 
 ```
 sudo nix-channel --add https://nixos.org/channels/nixpkgs-unstable unstable
@@ -65,15 +56,45 @@ in
 };
 ```
 
+## Stow
+
+The `setup.sh` is WIP. For machine-wide configurations:
+
+```
+sudo stow --target=/etc/nixos machines/<machine>
+```
+
+And for home-manager (see the `home-manager` section first), first remove the auto-generated `home.nix` and then `stow` the doots version:
+
+```
+rm ~/.config/nixpkgs/home.nix
+cd doots
+stow --target $HOME home-manager
+```
+
 ### Home manager
 
 #### Installation
 
-Install [home-manager](https://nix-community.github.io/home-manager/index.html#sec-install-standalone)
+- Install [home-manager](https://nix-community.github.io/home-manager/index.html#sec-install-standalone)
+- Stow: `nix-env -iA nixpkgs.stow`
+- [vim-plug](https://github.com/junegunn/vim-plug) is required, and I haven't found a good way of installing it without putting the config into home-manager (which I want to avoid so I can use it without home-manager and outside of nixOS): 
+
+```
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+```
 
 #### Configuration
 
 `man home-configuration.nix`
+
+## Troubleshooting
+### `error: file 'nixpkgs' was not found in the Nix search path (add it using $NIX_PATH or -I)`
+```
+nix-channel --add https://nixos.org/channels/nixos-22.05 nixpkgs
+nix-channel --update
+```
 
 ## TODOs
 

@@ -40,8 +40,8 @@
       enable = true;
       extraPackages = with pkgs; [
         dmenu
-	i3status
-	i3lock
+	    i3status
+	    i3lock
       ];
     };
 
@@ -56,10 +56,11 @@
      isNormalUser = true;
      extraGroups = [
      	"wheel"
-	"audio"
-   	# adding docker to user's extraGroups equivalent to running as root
-	"docker"
+	    "audio"
+   	    # adding docker to user's extraGroups equivalent to running as root
+	    "docker"
      ];
+     # enable 'sudo' for user
      shell = pkgs.zsh;
    };
 
@@ -79,7 +80,14 @@
      pulseaudio # possible remove?
      #firefox
      docker
+     bottles
    ];
+
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in firewall for Source Dedicated Server
+  };
 
   programs.zsh = {
   	enable = true;
