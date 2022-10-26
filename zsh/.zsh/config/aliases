@@ -5,6 +5,7 @@ alias n='nvim "$(fzf)"'
 
 alias vi="nvim"
 alias vim="nvim"
+alias python=python3
 
 alias pablo="cd && cd Edge/pablo"
 alias platform="cd && cd Edge/edge-platform"

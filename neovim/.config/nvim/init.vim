@@ -73,9 +73,10 @@ syntax enable
 filetype plugin indent on
 
 call plug#begin()
-Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/playground'
 Plug 'neovim/nvim-lspconfig'
@@ -100,12 +101,14 @@ Plug 'vim-syntastic/syntastic'
 Plug 'juliosueiras/vim-terraform-completion'
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 Plug 'tpope/vim-fugitive'
-Plug 'kyazdani42/nvim-web-devicons' " for file icons
+" for file icons
+Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'airblade/vim-gitgutter'
 Plug 'dracula/vim', { 'as': 'dracula' }
 " \m/ deafheaven
 Plug 'nikolvs/vim-sunbather'
+Plug 'jparise/vim-graphql'
 call plug#end()
 
 colorscheme dracula
@@ -131,7 +134,7 @@ set shortmess+=c
 lua <<EOF
 local nvim_lsp = require'lspconfig'
 
-local opts = {
+local rust_opts = {
     tools = { -- rust-tools options
         autoSetHints = true,
         hover_with_actions = true,
@@ -162,7 +165,7 @@ local opts = {
     },
 }
 
-require('rust-tools').setup(opts)
+require('rust-tools').setup(rust_opts)
 
 EOF
 
@@ -209,21 +212,42 @@ lua require'lspconfig'.sumneko_lua.setup{}
 lua require'nvim-tree'.setup {}
 lua require'nvim-web-devicons'.setup {}
 
+
+lua <<EOF
+require('telescope').setup{
+  defaults = {
+    mappings = {
+      n = {
+    	  ['<c-d>'] = require('telescope.actions').delete_buffer
+      },
+      i = {
+        ["<C-h>"] = "which_key",
+        ['<c-d>'] = require('telescope.actions').delete_buffer
+      }
+    }
+  },
+}
+EOF
+
 " https://github.com/nvim-telescope/telescope.nvim
 nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
 nnoremap <leader>gg <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <leader>hh <cmd>lua require('telescope.builtin').grep_string()<cr>
-nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
+nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers({sort_lastused})<cr>
 nnoremap <leader>gs <cmd>lua require('telescope.builtin').git_status()<cr>
 " nnoremap <leader>gc <cmd>lua require(ctelescope.builtin').<cr>
 
 nnoremap <silent>K      <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <silent>gd     <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> ga    <cmd>lua vim.lsp.buf.code_action()<CR>
+nnoremap <silent>ga     <cmd>lua vim.lsp.buf.code_action()<CR>
 nnoremap <silent>gb     <cmd>b#<CR>
 nnoremap <silent>gr     <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <leader>cc     <cmd>cclose<CR>
 nnoremap <leader>e      <cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+nnoremap <leader>fh     <cmd>lua require('telescope.builtin').help_tags()<cr>
+
+" `esc` to act normally in :term
+tnoremap <Esc> <C-\><C-n>
 
 nnoremap <C-o> :NvimTreeToggle<CR>
 
