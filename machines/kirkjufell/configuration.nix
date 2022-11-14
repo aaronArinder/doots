@@ -111,6 +111,7 @@ in
     ripgrep
     gcc
     steam
+    obsidian
   ];
 
 
