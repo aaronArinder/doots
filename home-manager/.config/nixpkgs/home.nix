@@ -11,8 +11,9 @@ in
     ./configs/alacritty.nix
     ./configs/git.nix
     ./configs/zsh.nix
-    #./configs/i3.nix
-    #./configs/polybar.nix
+    # need to toggle between darwin/linux
+    ./configs/i3.nix
+    ./configs/polybar.nix
   ];
 
   home.username = "aaronarinder";
@@ -32,7 +33,8 @@ in
     zsh
     oh-my-zsh
     #nodejs-17_x
-    #discord
+    # need to toggle between darwin/linux
+    discord
     # nix formatter
     nixpkgs-fmt
     # backlight brightness via i3
