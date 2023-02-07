@@ -15,6 +15,8 @@ in
       ./hardware-configuration.nix
     ];
 
+  nixpkgs.config.allowUnfree = true;
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -63,6 +65,10 @@ in
   # sound.enable = true;
   hardware.pulseaudio.enable = true;
 
+  # bluetooth
+  hardware.bluetooth.enable = true;
+  services.blueman.enable = true;
+
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
 
@@ -104,6 +110,8 @@ in
     xclip
     ripgrep
     gcc
+    steam
+    obsidian
   ];
 
 
