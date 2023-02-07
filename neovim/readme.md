@@ -14,3 +14,6 @@
 - `gr` lists references in quickfix
 - `<leader>cc` closes quickfix list
 
+## shit I forget
+- `:mess` or `:messages`
+
