@@ -12,8 +12,9 @@ in
     ./configs/git.nix
     ./configs/zsh.nix
     # need to toggle between darwin/linux
-    ./configs/i3.nix
-    ./configs/polybar.nix
+    #./configs/i3.nix
+    # need to toggle between darwin/linux
+    #./configs/polybar.nix
   ];
 
   home.username = "aaronarinder";

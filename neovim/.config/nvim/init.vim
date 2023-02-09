@@ -25,6 +25,14 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+
+lua <<EOF
+-- from nvim-tree/nvim-tree's github; suggests being up high in the config
+-- disable netrw at the very start of your init.lua (strongly advised)
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+EOF
+
 " use :options for full list
 set tabstop=4 softtabstop=4 " might be removable with `filetype plugin indent on`
 set shiftwidth=4
@@ -78,7 +86,7 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
-Plug 'nvim-treesitter/playground'
+"Plug 'nvim-treesitter/playground'
 Plug 'neovim/nvim-lspconfig'
 " completion framework
 Plug 'hrsh7th/nvim-cmp'
@@ -102,8 +110,8 @@ Plug 'juliosueiras/vim-terraform-completion'
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 Plug 'tpope/vim-fugitive'
 " for file icons
-Plug 'kyazdani42/nvim-web-devicons'
-Plug 'kyazdani42/nvim-tree.lua'
+Plug 'nvim-tree/nvim-web-devicons'
+Plug 'nvim-tree/nvim-tree.lua'
 Plug 'airblade/vim-gitgutter'
 Plug 'dracula/vim', { 'as': 'dracula' }
 " \m/ deafheaven
@@ -128,16 +136,23 @@ set completeopt=menuone,noinsert,noselect
 " Avoid showing extra messages when using completion
 set shortmess+=c
 
+" folding
+set foldmethod=manual
+set foldexpr=nvim_treesitter#foldexpr()
+" disable folding at startup
+set nofoldenable
+
 " Configure LSP through rust-tools.nvim plugin.
 " rust-tools will configure and enable certain LSP features for us.
 " See https://github.com/simrat39/rust-tools.nvim#configuration
+
 lua <<EOF
 local nvim_lsp = require'lspconfig'
 
 local rust_opts = {
     tools = { -- rust-tools options
         autoSetHints = true,
-        hover_with_actions = true,
+        --hover_with_actions = true,
         inlay_hints = {
             only_current_line = false,
             show_parameter_hints = false,
@@ -209,9 +224,49 @@ EOF
 lua require'lspconfig'.tsserver.setup{}
 lua require'lspconfig'.terraformls.setup{}
 lua require'lspconfig'.sumneko_lua.setup{}
-lua require'nvim-tree'.setup {}
 lua require'nvim-web-devicons'.setup {}
 
+lua <<EOF
+-- :h nvim-tree-setup
+require("nvim-tree").setup({
+  sort_by = "case_sensitive",
+  view = {
+    width = 30,
+    mappings = {
+      list = {
+        { key = "u", action = "dir_up" },
+      },
+    },
+    relativenumber = false,
+  },
+  renderer = {
+    group_empty = true,
+    -- on macOS I have some trouble with the nvim-tree icons that I (years later) haven't figured out
+    icons = {
+      glyphs = {
+        default = "",
+        symlink = "",
+        bookmark = "",
+        modified = "●",
+        folder = {
+          arrow_closed = "",
+          arrow_open = "",
+          default = "",
+          open = "",
+          empty = "",
+          empty_open = "",
+          symlink = "",
+          symlink_open = "",
+        },
+      }
+    }
+  },
+  filters = {
+    dotfiles = false,
+  },
+  auto_reload_on_write = true,
+})
+EOF
 
 lua <<EOF
 require('telescope').setup{
@@ -243,7 +298,7 @@ nnoremap <silent>ga     <cmd>lua vim.lsp.buf.code_action()<CR>
 nnoremap <silent>gb     <cmd>b#<CR>
 nnoremap <silent>gr     <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <leader>cc     <cmd>cclose<CR>
-nnoremap <leader>e      <cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+nnoremap <leader>e      <cmd>lua vim.diagnostic.open_float()<CR>
 nnoremap <leader>fh     <cmd>lua require('telescope.builtin').help_tags()<cr>
 
 " `esc` to act normally in :term
