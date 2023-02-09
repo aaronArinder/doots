@@ -16,4 +16,5 @@
 
 ## shit I forget
 - `:mess` or `:messages`
+- `:NvimTreeRefresh`
 
