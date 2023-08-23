@@ -26,12 +26,17 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
 endif
 
 
-lua <<EOF
--- from nvim-tree/nvim-tree's github; suggests being up high in the config
--- disable netrw at the very start of your init.lua (strongly advised)
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-EOF
+" for opening docs comments using :RustOpenExternalDocs
+" https://github.com/neovim/neovim/issues/13675#issuecomment-885666975
+" let g:nvim_tree_disable_netrw = 0
+" let g:nvim_tree_hijack_netrw = 0
+
+"lua <<EOF
+"-- from nvim-tree/nvim-tree's github; suggests being up high in the config
+"-- disable netrw at the very start of your init.lua (strongly advised)
+"vim.g.loaded_netrw = 1
+"vim.g.loaded_netrwPlugin = 1
+"EOF
 
 " use :options for full list
 set tabstop=4 softtabstop=4 " might be removable with `filetype plugin indent on`
@@ -117,11 +122,14 @@ Plug 'dracula/vim', { 'as': 'dracula' }
 " \m/ deafheaven
 Plug 'nikolvs/vim-sunbather'
 Plug 'jparise/vim-graphql'
+Plug 'folke/tokyonight.nvim'
 call plug#end()
 
-colorscheme dracula
+"colorscheme dracula
 "set background=light
 "colorscheme sunbather
+colorscheme tokyonight-day
+"colorscheme tokyonight-moon
 
 highlight! link SignColumn LineNr
 let mapleader = " "
@@ -291,6 +299,7 @@ nnoremap <leader>hh <cmd>lua require('telescope.builtin').grep_string()<cr>
 nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers({sort_lastused})<cr>
 nnoremap <leader>gs <cmd>lua require('telescope.builtin').git_status()<cr>
 " nnoremap <leader>gc <cmd>lua require(ctelescope.builtin').<cr>
+nnoremap <leader>gd :RustOpenExternalDocs<cr>
 
 nnoremap <silent>K      <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <silent>gd     <cmd>lua vim.lsp.buf.definition()<CR>

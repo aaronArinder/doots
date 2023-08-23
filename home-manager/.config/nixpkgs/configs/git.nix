@@ -20,7 +20,7 @@
       };
 
       pull = {
-        rebase = false;
+        rebase = true;
       };
 
       help = {
