@@ -231,7 +231,9 @@ EOF
 
 lua require'lspconfig'.tsserver.setup{}
 lua require'lspconfig'.terraformls.setup{}
-lua require'lspconfig'.sumneko_lua.setup{}
+lua require'lspconfig'.lua_ls.setup{}
+lua require'lspconfig'.nixd.setup{}
+
 lua require'nvim-web-devicons'.setup {}
 
 lua <<EOF
@@ -240,11 +242,6 @@ require("nvim-tree").setup({
   sort_by = "case_sensitive",
   view = {
     width = 30,
-    mappings = {
-      list = {
-        { key = "u", action = "dir_up" },
-      },
-    },
     relativenumber = false,
   },
   renderer = {
@@ -291,6 +288,7 @@ require('telescope').setup{
   },
 }
 EOF
+
 
 " https://github.com/nvim-telescope/telescope.nvim
 nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>

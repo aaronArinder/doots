@@ -6,6 +6,10 @@ For any configuration not managed with nix, `stow` is used to create symlinks.
 
 ## Nix
 
+### TODO
+
+- [ ] remove sudo nix channels
+
 ### General
 
 #### Maintenance
@@ -102,7 +106,19 @@ stow --target $HOME home-manager
 
 #### Installation
 
-- Install [home-manager](https://nix-community.github.io/home-manager/index.html#sec-install-standalone)
+Use home-manager as a module:
+
+```
+nix-channel --add https://github.com/nix-community/home-manager/archive/release-23.11.tar.gz home-manager
+nix-channel --update
+```
+
+And then import it (see examples in machines/matterhorn|ucompahgre):
+
+```
+imports = [ <home-manager/nix-darwin> ];
+```
+
 - Stow: `nix-env -iA nixpkgs.stow`
 - [vim-plug](https://github.com/junegunn/vim-plug) is required, and I haven't found a good way of installing it without putting the config into home-manager (which I want to avoid so I can use it without home-manager and outside of nixOS):
 
