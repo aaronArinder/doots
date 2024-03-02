@@ -8,31 +8,22 @@ For any configuration not managed with nix, `stow` is used to create symlinks.
 
 ### General
 
-### Updating
+#### Maintenance
 
-#### Home Manager
-
-`home-manager switch`
-
-#### Darwin
-
-Make sure you have the `darwin` channel via `nix-channel --list`:
-
-`nix-channel --update`
-`darwin-rebuild switch`
-
-#### Nix Packages (nixpkgs)
-
-TODO; something like this:
-`sudo nix-channel --add <new-version-url> nixpkgs`
-
-#### Formatting
-
-There isn't great LSP/formatting support in neovim yet for nix; so, use the following to format files:
+- Update home-manager: `home-manager switch`
+- Update darwin:
 
 ```
-nixpkgs-fmt ./path/to/file
+# First make sure you have the `darwin` channel via `nix-channel --list`
+
+nix-channel --update
+darwin-rebuild switch
 ```
+
+- Update `nixpkgs` version (TODO/verify): `sudo nix-channel --add <new-version-url> nixpkgs`
+- Format: `nixpkgs-fmt ./path/to/file`
+- Garbage collect the store: `nix-collect-garbage` (`-d` to delete old profiles/generations for extra cleanup; see manpage)
+
 
 ### `/etc/nixos/configuration`
 
