@@ -125,10 +125,10 @@ Plug 'jparise/vim-graphql'
 Plug 'folke/tokyonight.nvim'
 call plug#end()
 
-"colorscheme dracula
+colorscheme dracula
 "set background=light
 "colorscheme sunbather
-colorscheme tokyonight-day
+"colorscheme tokyonight-day
 "colorscheme tokyonight-moon
 
 highlight! link SignColumn LineNr
@@ -315,15 +315,23 @@ tnoremap <Esc> <C-\><C-n>
 
 nnoremap <C-o> :NvimTreeToggle<CR>
 
+" directional navigation
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
+" tabs
+nnoremap <silent>    <C-N> <cmd>tabprevious<CR>
+nnoremap <silent>    <C-M> <cmd>tabnext<CR>
+
+
 " open splits to the right and below
 " other useful stuff: https://thoughtbot.com/blog/vim-splits-move-faster-and-more-naturally
 set splitbelow
 set splitright
+
+
 
 fun! TrimWhitespace()
     let l:save = winsaveview()

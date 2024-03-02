@@ -1,3 +1,5 @@
+# `home-manager switch` to build/activate
+
 # man home-configuration.nix
 
 { config, pkgs, ... }:
@@ -45,10 +47,14 @@ in
     #spotify
     ripgrep
     fd
+    exercism
+    kubectl
+    ngrep
+    tcpdump
+    gh
   ];
 
   home.sessionPath = [ "$HOME/.cargo/bin" ];
-
   home.stateVersion = "21.11";
 
   # Let Home Manager install and manage itself.

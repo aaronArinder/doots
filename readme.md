@@ -8,7 +8,27 @@ For any configuration not managed with nix, `stow` is used to create symlinks.
 
 ### General
 
-There isn't great LSP/formatting support in neovim yet; so, use the following to format files:
+### Updating
+
+#### Home Manager
+
+`home-manager switch`
+
+#### Darwin
+
+Make sure you have the `darwin` channel via `nix-channel --list`:
+
+`nix-channel --update`
+`darwin-rebuild switch`
+
+#### Nix Packages (nixpkgs)
+
+TODO; something like this:
+`sudo nix-channel --add <new-version-url> nixpkgs`
+
+#### Formatting
+
+There isn't great LSP/formatting support in neovim yet for nix; so, use the following to format files:
 
 ```
 nixpkgs-fmt ./path/to/file
@@ -60,10 +80,25 @@ in
 
 The `setup.sh` is WIP. For machine-wide configurations:
 
+### System-wide configuration (hardware, sys-wide packages and config options)
+
+From within `doots`:
+
+#### For Linux (matterhorn, kirkjufell):
+
 ```
-sudo stow --target=/etc/nixos machines/<machine>
+cd machines
+sudo stow --target=/etc/nixos <machine>
 ```
 
+#### For Darwin (uncompahgre):
+
+```
+cd machines
+sudo stow --target $HOME/.nixpkgs <machine>
+```
+
+### User configuration (packages like neovim, alacritty)
 And for home-manager (see the `home-manager` section first), first remove the auto-generated `home.nix` and then `stow` the doots version:
 
 ```
@@ -78,7 +113,7 @@ stow --target $HOME home-manager
 
 - Install [home-manager](https://nix-community.github.io/home-manager/index.html#sec-install-standalone)
 - Stow: `nix-env -iA nixpkgs.stow`
-- [vim-plug](https://github.com/junegunn/vim-plug) is required, and I haven't found a good way of installing it without putting the config into home-manager (which I want to avoid so I can use it without home-manager and outside of nixOS): 
+- [vim-plug](https://github.com/junegunn/vim-plug) is required, and I haven't found a good way of installing it without putting the config into home-manager (which I want to avoid so I can use it without home-manager and outside of nixOS):
 
 ```
 sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
@@ -96,12 +131,3 @@ nix-channel --add https://nixos.org/channels/nixos-22.05 nixpkgs
 nix-channel --update
 ```
 
-## TODOs
-
-### zsh
-
--   [ ] Figure out better alias strategy (move what's currently in zshrc)
-
-### home-manager
-
--   [ ] Figure out how to modularize users across machines (need macOS/nix variants)
