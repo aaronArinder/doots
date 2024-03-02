@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  global  = import ./constants.nix;
+  global  = import ../constants.nix;
 in
 {
   programs.git = {

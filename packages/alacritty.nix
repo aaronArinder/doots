@@ -27,11 +27,8 @@ in
           family = "Menlo";
           style = "Italic";
         };
-        size = 13;
-        # suitable for retina displays
-        use_thin_strokes = true;
+        size = 12;
       };
-      # Dracula
       colors = colors.dracula;
     };
   };

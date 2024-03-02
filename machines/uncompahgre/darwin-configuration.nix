@@ -9,11 +9,9 @@ in
 {
 
   imports = [
-    # Makes `home-manager` option available
+    # Makes `home-manager` option available; keep this higher in the order, required for
+    # home-manager section below to work; see the comment on the import statement there
     <home-manager/nix-darwin>
-    #../../packages/alacritty.nix
-    #../../packages/git.nix
-    #../../packages/zsh.nix
   ];
 
   ##################
@@ -27,13 +25,13 @@ in
   home-manager.users.aaronarinder = {
     home.packages = with pkgs; [
       unstable.neovim
+      unstable.vimPlugins.vim-plug
       alacritty
       nerdfonts
       fira-code
       htop
       zsh
       oh-my-zsh
-      # nix formatter
       nixpkgs-fmt
       ripgrep
       fd
@@ -51,7 +49,7 @@ in
     imports = [
       ../../packages/alacritty.nix
       ../../packages/git.nix
-      #../../packages/zsh.nix
+      ../../packages/zsh.nix
     ];
   };
 
