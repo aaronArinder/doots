@@ -73,9 +73,9 @@ let g:syntastic_check_on_wq = 0
 
 " prettier
 " to bypass, use :noautocmd w
-let g:prettier#autoformat = 1
-let g:prettier#autoformat_require_pragma = 0
-let g:prettier#exec_cmd_async = 1
+"let g:prettier#autoformat = 1
+"let g:prettier#autoformat_require_pragma = 0
+"let g:prettier#exec_cmd_async = 1
 
 " rust
 "let g:rustfmt_fail_silently = 0
@@ -112,7 +112,7 @@ Plug 'nvim-lua/completion-nvim'
 Plug 'hashivim/vim-terraform'
 Plug 'vim-syntastic/syntastic'
 Plug 'juliosueiras/vim-terraform-completion'
-Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+"Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 Plug 'tpope/vim-fugitive'
 " for file icons
 Plug 'nvim-tree/nvim-web-devicons'
@@ -181,7 +181,7 @@ local rust_opts = {
             ["rust-analyzer"] = {
                 -- enable clippy on save
                 checkOnSave = {
-                    command = "clippy"
+                    command = "cargo clippy -- -D warnings -D clippy::todo"
                 },
             }
         }
@@ -340,6 +340,6 @@ augroup DEFAULT_GROUP
     " sure multiple of the same listeners aren't attached
     autocmd!
     autocmd BufWritePre * :call TrimWhitespace()
-    autocmd BufWritePre *.rs lua vim.lsp.buf.formatting_sync(nil, 300)
+    autocmd BufWritePre *.rs lua vim.lsp.buf.format()
 augroup END
 
