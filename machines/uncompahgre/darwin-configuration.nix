@@ -25,7 +25,9 @@ in
   home-manager.users.aaronarinder = {
     home.packages = with pkgs; [
       unstable.neovim
-      unstable.vimPlugins.vim-plug
+      # currently colliding with rustaceanvim; add back in when collision fixed
+      #unstable.vimPlugins.vim-plug
+      unstable.vimPlugins.rustaceanvim
       alacritty
       nerdfonts
       fira-code
