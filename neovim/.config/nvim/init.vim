@@ -1,3 +1,5 @@
+" reload config with `:source %`
+
 """""""""
 " notes
 """""""""
@@ -26,6 +28,7 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
 endif
 
 
+" TODO fix
 " for opening docs comments using :RustOpenExternalDocs
 " https://github.com/neovim/neovim/issues/13675#issuecomment-885666975
 " let g:nvim_tree_disable_netrw = 0
@@ -85,6 +88,11 @@ let g:syntastic_check_on_wq = 0
 syntax enable
 filetype plugin indent on
 
+
+" this needs to be fully baked; I migrated because overlays weren't working,
+" but now rust-analyzer doesn't seem to be kicking on
+"
+" https://github.com/mrcjkb/rustaceanvim
 lua <<EOF
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -107,9 +115,13 @@ EOF
 
 call plug#begin()
 Plug 'nvim-lua/popup.nvim'
+" telescope dep
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.x' }
 Plug 'neovim/nvim-lspconfig'
+
+" telescope dep; general ast api
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " completion framework
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -332,9 +344,21 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
+" window-resizing
+nnoremap <C-P> :vert res +3<CR>
+nnoremap <C-Y> :vert res -3<CR>
+nnoremap <C-U> :res +3<CR>
+nnoremap <C-I> :res -3<CR>
+"nnoremap <C-V> :res<CR>
+nnoremap <C-B> :vert res<CR>
+nnoremap <C-F> <cmd>vert wincmd =<CR><cmd>wincmd =<CR>
+
 " tabs
 nnoremap <silent>    <C-N> <cmd>tabprevious<CR>
 nnoremap <silent>    <C-M> <cmd>tabnext<CR>
+
+" insert iso 8601 timestamp
+nnoremap <C-T> <cmd>r!TZ=UTC0 date +"\%Y-\%m-\%dT\%H:\%M:\%S\%z"<CR>
 
 
 " open splits to the right and below
