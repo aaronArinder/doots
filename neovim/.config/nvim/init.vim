@@ -4,7 +4,7 @@
 " notes
 """""""""
 "
-" - migrate to lazy.vim
+" - miggate to lazy.vim
 " - fix terrible lsp configs
 " - notes on rustaceanvim
 "
