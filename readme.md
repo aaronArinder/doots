@@ -5,9 +5,10 @@ Dotfile management using nix, home-manager, and stow.
 ### Installation
 #### Dependencies
 
-- install nix
-- add the `home-manager` channel: `nix-channel --add https://github.com/nix-community/home-manager/archive/release-23.11.tar.gz home-manager`
-- `stow` can be installed in an ephemeral shell (it's primarily useful in system setup, and we can't just plop it in a machine's config file because we're using `stow` during the boostrapping process): `nix-shell -p stow`
+- [install nix](https://nixos.org/download/)
+- add the `home-manager` channel: `nix-channel --add https://github.com/nix-community/home-manager/archive/<RELEASE>.tar.gz home-manager`
+  - find the release from the github; it will be in the form `release-23.11` 
+- `nix-shell -p stow`
 
 #### Machine
 ###### For Linux (matterhorn, kirkjufell):
@@ -20,13 +21,17 @@ sudo stow --target=/etc/nixos <machine>
 ##### For Darwin (uncompahgre):
 
 ```
+mkdir $HOME/.nixpkgs
 cd machines
-sudo stow --target $HOME/.nixpkgs <machine>
+sudo stow --target $HOME/.nixpkgs uncompahgre
 ```
 
 ### Maintenance
 
 - Add channel: `nix-channel --add <channel-url> <channel-name>`
+  - Go to the [repo](https://github.com/NixOS/nixpkgs) and find the right release branch name for the target architecture, e.g. `nixpkgs-24.05-darwin` for darwin
+  - Add the main channel and call it `nixos`
+  - Add the unstable channel and call it `unstable`
 - Update channels: `nix-channel --update`
 - Darwin: build/activate: `darwin-rebuild switch`
 - Update `nixpkgs` version: `nix-channel --add <new-version-url> nixpkgs`
