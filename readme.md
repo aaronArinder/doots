@@ -26,13 +26,19 @@ cd machines
 sudo stow --target $HOME/.nixpkgs uncompahgre
 ```
 
-### Maintenance
+Install [nix-darwin](https://github.com/LnL7/nix-darwin). 
+
+### Add channels
 
 - Add channel: `nix-channel --add <channel-url> <channel-name>`
   - Go to the [repo](https://github.com/NixOS/nixpkgs) and find the right release branch name for the target architecture, e.g. `nixpkgs-24.05-darwin` for darwin
   - Add the main channel and call it `nixos`
   - Add the unstable channel and call it `unstable`
+
+### Maintenance
+
 - Update channels: `nix-channel --update`
+- (Optional for darwin) `nix-channel --update darwin`
 - Darwin: build/activate: `darwin-rebuild switch`
 - Update `nixpkgs` version: `nix-channel --add <new-version-url> nixpkgs`
 - Format: `nixpkgs-fmt ./path/to/file`
