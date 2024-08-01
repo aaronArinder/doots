@@ -26,7 +26,9 @@ cd machines
 sudo stow --target $HOME/.nixpkgs uncompahgre
 ```
 
-Install [nix-darwin](https://github.com/LnL7/nix-darwin). 
+Install [nix-darwin](https://github.com/LnL7/nix-darwin)
+
+The installer should rebuild switch, but if not exit or source the shell and `darwin-rebuild switch`
 
 ### Add channels
 
