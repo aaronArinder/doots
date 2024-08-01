@@ -10,7 +10,11 @@ Dotfile management using nix, home-manager, and stow.
   - find the release from the github; it will be in the form `release-23.11` 
 - `nix-shell -p stow`
 
-#### Initial symbolic links
+#### Initial setup
+
+##### Git
+
+Get [ssh](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) sorted
 
 ##### neovim
 
