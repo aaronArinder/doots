@@ -10,6 +10,29 @@ Dotfile management using nix, home-manager, and stow.
   - find the release from the github; it will be in the form `release-23.11` 
 - `nix-shell -p stow`
 
+#### Initial symbolic links
+
+##### neovim
+
+Neovim uses the `.config` directory
+
+```
+$ pwd
+> doots
+```
+
+Doublecheck what `stow` will do:
+
+```
+stow --adopt -nv
+```
+
+If it looks good, remove the `-n` and run:
+
+```
+stow --adopt -v
+```
+
 #### Machine
 ###### For Linux (matterhorn, kirkjufell):
 
