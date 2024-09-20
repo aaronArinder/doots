@@ -61,6 +61,7 @@ The installer should rebuild switch, but if not exit or source the shell and `da
 
 - Add channel: `nix-channel --add <channel-url> <channel-name>`
   - Go to the [repo](https://github.com/NixOS/nixpkgs) and find the right release branch name for the target architecture, e.g. `nixpkgs-24.05-darwin` for darwin
+    - For example: `nix-channel --add https://nixos.org/channels/nixpkgs-24.05-darwin nixos`
   - Add the main channel and call it `nixos`
   - Add the unstable channel and call it `unstable`
 
