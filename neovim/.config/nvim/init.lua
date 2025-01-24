@@ -442,7 +442,18 @@ require("lazy").setup({
 				--nixd = {},
 				kotlin_language_server = {},
 				--rust_analyzer = {},
-				pylyzer = {},
+				pylsp = {
+					settings = {
+						pylsp = {
+							plugins = {
+								pycodestyle = {
+									ignore = { "W391" },
+									maxLineLength = 100,
+								},
+							},
+						},
+					},
+				},
 				--tsserver = {},
 				lua_ls = {
 					-- cmd = {...},
