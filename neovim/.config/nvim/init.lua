@@ -2,7 +2,6 @@
 --
 -- TODO:
 --  - better intellisense for vim commands (I want `:T` to give me verything available starting with T)
---  - get dracula back as colorscheme
 --  - migrate `pt` to neovim plugin
 --]]
 
@@ -441,7 +440,8 @@ require("lazy").setup({
 				-- NOTE: See `:help lspconfig-all` for a list of all the pre-configured LSPs
 				terraformls = {},
 				--nixd = {},
-				rust_analyzer = {},
+				--rust_analyzer = {},
+				kotlin_language_server = {},
 				--tsserver = {},
 				lua_ls = {
 					-- cmd = {...},
