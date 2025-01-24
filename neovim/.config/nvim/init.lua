@@ -440,8 +440,9 @@ require("lazy").setup({
 				-- NOTE: See `:help lspconfig-all` for a list of all the pre-configured LSPs
 				terraformls = {},
 				--nixd = {},
-				--rust_analyzer = {},
 				kotlin_language_server = {},
+				--rust_analyzer = {},
+				pylyzer = {},
 				--tsserver = {},
 				lua_ls = {
 					-- cmd = {...},
@@ -518,7 +519,7 @@ require("lazy").setup({
 			formatters_by_ft = {
 				lua = { "stylua" },
 				-- Conform can also run multiple formatters sequentially
-				-- python = { "isort", "black" },
+				python = { "isort", "black" },
 				--
 				-- You can use a sub-list to tell conform to run *until* a formatter
 				-- is found.
