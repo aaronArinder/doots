@@ -14,7 +14,9 @@ Dotfile management using nix, home-manager, and stow.
 
 ##### Git
 
-Get [ssh](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) sorted
+- `nix-shell -p git`
+- 
+- Get [ssh](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) sorted
 
 ##### neovim
 
