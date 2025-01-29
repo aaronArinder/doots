@@ -15,12 +15,12 @@ Dotfile management using nix, home-manager, and stow.
 ##### Git
 
 - `nix-shell -p git`
-- 
 - Get [ssh](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) sorted
+- `git clone git@github.com:aaronArinder/doots.git` in your home directory
 
 ##### neovim
 
-Neovim uses the `.config` directory
+Neovim uses the `.config` directory. So, check that you're in the right directory (`doots`):
 
 ```
 $ pwd
@@ -30,14 +30,16 @@ $ pwd
 Doublecheck what `stow` will do:
 
 ```
-stow --adopt -nv
+stow --adopt -nv neovim
 ```
 
-If it looks good, remove the `-n` and run:
+If it looks good (it should say `LINK: .config => doots/neovim/.config`), remove the `-n` and run:
 
 ```
-stow --adopt -v
+stow --adopt -v neovim
 ```
+
+⚠️ It probably matters that we do this first when setting up a machine; I don't know if stowing would overwrite `.config` here
 
 #### Machine
 ###### For Linux (matterhorn, kirkjufell):
