@@ -51,6 +51,8 @@ sudo stow --target=/etc/nixos <machine>
 
 ##### For Darwin (uncompahgre):
 
+⚠️ This is outdated; TODO: notes on doing it as a flake, using nix-darwin and home-manager
+
 ```
 mkdir $HOME/.nixpkgs
 cd machines
@@ -68,6 +70,7 @@ The installer should rebuild switch, but if not exit or source the shell and `da
     - For example: `nix-channel --add https://nixos.org/channels/nixpkgs-24.05-darwin nixos`
   - Add the main channel and call it `nixos`
   - Add the unstable channel and call it `unstable`
+  - Add home-manager
 
 ### Maintenance
 
