@@ -49,19 +49,14 @@ cd machines
 sudo stow --target=/etc/nixos <machine>
 ```
 
-##### For Darwin (uncompahgre):
+##### For Darwin (current machine: eolus):
 
-⚠️ This is outdated; TODO: notes on doing it as a flake, using nix-darwin and home-manager
-
-```
-mkdir $HOME/.nixpkgs
-cd machines
-sudo stow --target $HOME/.nixpkgs uncompahgre
-```
-
-Install [nix-darwin](https://github.com/LnL7/nix-darwin)
-
-The installer should rebuild switch, but if not exit or source the shell and `darwin-rebuild switch`
+- Follow installaton for [nix-darwin](https://github.com/LnL7/nix-darwin)
+- Make sure you get an `/etc/nix-darwin`
+- Kill the initial flake and lockfile
+- `sudo stow --target=/etc/nix-darwin ./nix-darwin` from within `machines/eolus`
+- You should now be able to apply the config via `darwin-rebuild switch --impure`
+  - The impurity comes from loading modules into the flake
 
 ### Add channels
 
