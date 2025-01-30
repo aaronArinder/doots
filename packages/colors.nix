@@ -4,7 +4,7 @@
       background = "#282a36";
       foreground = "#f8f8f2";
       bright_foreground = "#ffffff";
-      purple = "#BD93FD";
+      #purple = "#BD93FD";
     };
 
     cursor = {
@@ -26,10 +26,10 @@
         foreground = "#44475a";
         background = "#ffb86c";
       };
-      footer_bar = {
-        background = "#282a36";
-        foreground = "#f8f8f2";
-      };
+      #footer_bar = {
+      #  background = "#282a36";
+      #  foreground = "#f8f8f2";
+      #};
     };
 
     hints = {
