@@ -45,6 +45,8 @@
           lua-language-server
           markdownlint-cli
           terraform-ls
+          lua
+          ripgrep
         ];
 
 	# Get some rusty bins into the path

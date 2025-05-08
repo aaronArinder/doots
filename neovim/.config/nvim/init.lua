@@ -79,6 +79,7 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- Buffers
 vim.keymap.set("n", "<leader>gb", "<cmd>bprev<CR>", { desc = "[G]o [b]ack to the previous file" })
+vim.keymap.set("n", "<leader>gf", "<cmd>bnext<CR>", { desc = "[G]o [f]orward to the next file" })
 
 -- Diagnostic keymaps
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous [D]iagnostic message" })
@@ -245,15 +246,30 @@ require("lazy").setup({
 
 			-- [[ Configure Telescope ]]
 			-- See `:help telescope` and `:help telescope.setup()`
+			--
+			local actions = require("telescope.actions")
+			local action_state = require("telescope.actions.state")
+			local builtin = require("telescope.builtin")
+
 			require("telescope").setup({
 				-- You can put your default mappings / updates / etc. in here
 				--  All the info you're looking for is in `:help telescope.setup()`
 				--
-				-- defaults = {
-				--   mappings = {
-				--     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-				--   },
-				-- },
+				defaults = {
+					mappings = {
+						i = {
+							["<bs>"] = function(prompt_bufnr)
+								local current_picker =
+									require("telescope.actions.state").get_current_picker(prompt_bufnr)
+								local selected_entry = action_state.get_selected_entry()
+								local bufnr = selected_entry.bufnr
+								vim.api.nvim_buf_delete(bufnr, { force = true })
+								actions.close(prompt_bufnr)
+								builtin.buffers()
+							end,
+						},
+					},
+				},
 				-- pickers = {}
 				extensions = {
 					["ui-select"] = {
@@ -268,6 +284,7 @@ require("lazy").setup({
 
 			-- See `:help telescope.builtin`
 			local builtin = require("telescope.builtin")
+
 			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
 			vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
 			vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
@@ -655,7 +672,9 @@ require("lazy").setup({
 			-- Load the colorscheme here.
 			-- Like many other themes, this one has different styles, and you could load
 			-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-			vim.cmd.colorscheme("tokyonight-night")
+			--vim.cmd.colorscheme("tokyonight-night")
+			vim.o.background = "light"
+			vim.cmd.colorscheme("default")
 
 			-- You can configure highlights by doing something like:
 			vim.cmd.hi("Comment gui=none")
@@ -752,6 +771,11 @@ require("lazy").setup({
 			--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 		end,
 	},
+	--{
+	--  "mrcjkb/rustaceanvim",
+	--  version = "^5", -- Recommended
+	--  lazy = false, -- This plugin is already lazy
+	--},
 
 	-- require 'kickstart.plugins.debug',
 	-- require 'kickstart.plugins.indent_line',
