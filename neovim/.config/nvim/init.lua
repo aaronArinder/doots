@@ -455,37 +455,37 @@ require("lazy").setup({
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
 				-- NOTE: See `:help lspconfig-all` for a list of all the pre-configured LSPs
-				terraformls = {},
+				--terraformls = {},
 				--nixd = {},
-				kotlin_language_server = {},
+				--kotlin_language_server = {},
 				--rust_analyzer = {},
-				pylsp = {
-					settings = {
-						pylsp = {
-							plugins = {
-								pycodestyle = {
-									ignore = { "W391" },
-									maxLineLength = 100,
-								},
-							},
-						},
-					},
-				},
+				--pylsp = {
+				--	settings = {
+				--		pylsp = {
+				--			plugins = {
+				--				pycodestyle = {
+				--					ignore = { "W391" },
+				--					maxLineLength = 100,
+				--				},
+				--			},
+				--		},
+				--	},
+				--},
 				--tsserver = {},
-				lua_ls = {
-					-- cmd = {...},
-					-- filetypes = { ...},
-					-- capabilities = {},
-					settings = {
-						Lua = {
-							completion = {
-								callSnippet = "Replace",
-							},
-							-- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-							-- diagnostics = { disable = { 'missing-fields' } },
-						},
-					},
-				},
+				--lua_ls = {
+				--	-- cmd = {...},
+				--	-- filetypes = { ...},
+				--	-- capabilities = {},
+				--	settings = {
+				--		Lua = {
+				--			completion = {
+				--				callSnippet = "Replace",
+				--			},
+				--			-- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+				--			-- diagnostics = { disable = { 'missing-fields' } },
+				--		},
+				--	},
+				--},
 			}
 
 			-- Ensure the servers and tools above are installed
@@ -732,7 +732,7 @@ require("lazy").setup({
 		opts = {
 			ensure_installed = {
 				"bash",
-				"c",
+				--"c",
 				"diff",
 				"html",
 				"lua",
@@ -740,9 +740,9 @@ require("lazy").setup({
 				"markdown",
 				"vim",
 				"vimdoc",
-				"hcl",
-				"terraform",
-				"typescript",
+				--"hcl",
+				--"terraform",
+				--"typescript",
 			},
 			-- Autoinstall languages that are not installed
 			auto_install = true,
