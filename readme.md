@@ -71,7 +71,7 @@ sudo stow --target=/etc/nixos <machine>
 
 - Update channels: `nix-channel --update`
 - (Optional for darwin) `nix-channel --update darwin`
-- Darwin: build/activate: `darwin-rebuild switch`
+- Darwin: build/activate: `darwin-rebuild switch` (potentially requiring the `--impure` flag)
 - Update `nixpkgs` version: `nix-channel --add <new-version-url> nixpkgs`
 - Format: `nixpkgs-fmt ./path/to/file`
 - Garbage collect the store: `nix-collect-garbage` (`-d` to delete old profiles/generations for extra cleanup; see manpage)
