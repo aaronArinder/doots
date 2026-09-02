@@ -25,9 +25,8 @@ in
   home-manager.users.aaronarinder = {
     home.packages = with pkgs; [
       unstable.neovim
-      # currently colliding with rustaceanvim; add back in when collision fixed
+      # neovim's plugins come from lazy.nvim (see init.lua), not from nix
       #unstable.vimPlugins.vim-plug
-      unstable.vimPlugins.rustaceanvim
       alacritty
       # The monolithic `nerdfonts` package was split into the nerd-fonts.*
       # namespace. Only FiraCode is needed -- see packages/alacritty.nix.
@@ -50,14 +49,32 @@ in
       pyright
       lua-language-server
       terraform-ls
+      rust-analyzer
 
       # conform.nvim formatters (formatters_by_ft in init.lua)
       stylua
       isort
       black
+      rustfmt
+
+      # nvim-lint linters (linters_by_ft in kickstart/plugins/lint.lua)
+      markdownlint-cli
+
+      # Rust toolchain. rust-analyzer finds the sysroot by shelling out to
+      # rustc, and init.lua points its check command at clippy, so neither is
+      # optional if diagnostics are meant to work.
+      rustc
+      cargo
+      clippy
     ];
 
     home.sessionPath = [ "$HOME/.cargo/bin" ];
+
+    # nixpkgs' rustc doesn't ship the standard library sources in its sysroot,
+    # so rust-analyzer can't resolve std without being pointed at them.
+    home.sessionVariables = {
+      RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
+    };
 
     # The state version is required and should stay at the version you
     # originally installed.
@@ -85,6 +102,15 @@ in
   # nix-darwin >= 25.05 manages nix-daemon unconditionally when nix.enable is
   # on, so services.nix-daemon.enable no longer exists.
   nix.package = pkgs.nix;
+
+  # nix-darwin's default build-user UID range moved from 300 to 351 to dodge a
+  # collision with UIDs macOS Sequoia hands out. This install predates that and
+  # its _nixbld users still sit at 301+; activation aborts unless the range it
+  # expects matches what's actually on the machine. Renumbering the users is
+  # only necessary on Sequoia (this box is on Sonoma 14), so pin the old range
+  # instead -- and migrate with nix's sequoia-nixbld-user-migration.sh, then
+  # drop this, before any upgrade to 15.
+  ids.uids.nixbld = 300;
 
   # As of nix-darwin 25.05 activation runs as root, and the options that used
   # to apply to whoever ran darwin-rebuild now apply to this user instead.

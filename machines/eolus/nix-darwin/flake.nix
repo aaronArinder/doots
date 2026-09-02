@@ -42,16 +42,44 @@
           zsh
           oh-my-zsh
           nixpkgs-fmt
-          lua-language-server
-          markdownlint-cli
-          terraform-ls
           lua
           ripgrep
+
+          # Language servers for neovim. Anything added to the `servers` table
+          # in neovim/.config/nvim/init.lua needs a package here.
+          typescript-language-server
+          pyright
+          lua-language-server
+          terraform-ls
+          rust-analyzer
+
+          # conform.nvim formatters (formatters_by_ft in init.lua)
+          stylua
+          isort
+          black
+          rustfmt
+
+          # nvim-lint linters (linters_by_ft in kickstart/plugins/lint.lua)
+          markdownlint-cli
+
+          # Rust toolchain. rust-analyzer finds the sysroot by shelling out to
+          # rustc, and init.lua points its check command at clippy, so neither
+          # is optional if diagnostics are meant to work.
+          rustc
+          cargo
+          clippy
         ];
 
 
 	# Get some rusty bins into the path
    	home.sessionPath = [ "$HOME/.cargo/bin" "$HOME/.local/bin" ];
+
+	# nixpkgs' rustc doesn't ship the standard library sources in its
+	# sysroot, so rust-analyzer can't resolve std without being pointed
+	# at them.
+	home.sessionVariables = {
+	  RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
+	};
 
     	# The state version is required and should stay at the version you
     	# originally installed.
