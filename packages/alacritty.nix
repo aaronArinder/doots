@@ -16,11 +16,11 @@ in
       };
       font = {
         normal = {
-          family = "Fira Code";
+          family = "FiraCode Nerd Font Mono";
           style = "Regular";
         };
         bold = {
-          family = "Fira Code";
+          family = "FiraCode Nerd Font Mono";
           style = "Bold";
         };
         italic = {
