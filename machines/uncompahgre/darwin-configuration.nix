@@ -38,7 +38,21 @@ in
       ripgrep
       fd
       exercism
+
+      # Language servers + formatters for neovim. These used to be installed
+      # imperatively by Mason; they live here now so all machines agree and
+      # the versions are pinned by the channel. Anything added to the
+      # `servers` table in neovim/.config/nvim/init.lua needs a package here.
       nixd
+      unstable.typescript-language-server
+      pyright
+      lua-language-server
+      terraform-ls
+
+      # conform.nvim formatters (formatters_by_ft in init.lua)
+      stylua
+      isort
+      black
     ];
 
     home.sessionPath = [ "$HOME/.cargo/bin" ];

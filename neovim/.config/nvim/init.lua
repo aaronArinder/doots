@@ -328,10 +328,9 @@ require("lazy").setup({
 	{ -- LSP Configuration & Plugins
 		"neovim/nvim-lspconfig",
 		dependencies = {
-			-- Automatically install LSPs and related tools to stdpath for Neovim
-			{ "williamboman/mason.nvim", config = true }, -- NOTE: Must be loaded before dependants
-			"williamboman/mason-lspconfig.nvim",
-			"WhoIsSethDaniel/mason-tool-installer.nvim",
+			-- NOTE: Language servers are NOT installed by Neovim. They come from
+			-- `home.packages` in this repo's nix-darwin / home-manager config
+			-- (machines/<host>/). lspconfig just picks them up off $PATH.
 
 			-- Useful status updates for LSP.
 			-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -448,19 +447,10 @@ require("lazy").setup({
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
-			-- manual registration of kotlin-lsp; not yet supported in :h lspconfig-all, so no automatic attachment
-			--local lspconfig = require("lspconfig")
-			--local configs = require("lspconfig.configs")
-			--if not configs.kotlin_lsp then
-			--	configs.kotlin_lsp = {
-			--		default_config = {
-			--			cmd = { vim.fn.stdpath("data") .. "/mason/bin/kotlin-lsp", "--stdio" },
-			--			filetypes = { "kotlin" },
-			--			root_dir = lspconfig.util.root_pattern("settings.gradle", "settings.gradle.kts", ".git"),
-			--		},
-			--	}
-			--end
-
+			-- Enable the following language servers
+			--  Feel free to add/remove any LSPs you want here. Each must also be present
+			--  in home.packages (machines/<host>/) so the binary is on $PATH.
+			--
 			--  Add any additional override configuration in the following tables. Available keys are:
 			--  - cmd (table): Override the default command used to start the server
 			--  - filetypes (table): Override the default list of associated filetypes for the server
@@ -468,60 +458,61 @@ require("lazy").setup({
 			--  - settings (table): Override the default settings passed when initializing the server.
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			-- NOTE: See `:help lspconfig-all` for a list of all the pre-configured LSPs
-			-- NOTE: sometimes there's not support in lspconfig for an lsp (like kotlin-lsp), and the naming here might come apart from
-			-- the binary name; be careful with how they're added, relate it to the ensure_installed list below (for the actual binary name)
+			-- NOTE: the lspconfig name often differs from the binary name (ts_ls ->
+			-- typescript-language-server); the binary is what home.packages needs.
 			local servers = {
-				--kotlin_lsp = {},
+				-- NOTE: Adding a server here is only half the job -- also add the
+				-- matching package to home.packages in machines/<host>/ and rebuild.
+				terraformls = {},
+				--nixd = {},
+				--rust_analyzer = {},
+				pyright = {
+					--python = {
+					--	analysis = {
+					--		autoSearchPaths = true,
+					--		diagnosticMode = "openFilesOnly",
+					--		useLibraryCodeForTypes = true,
+					--	},
+					--},
+				},
+				--pylsp = {
+				--	settings = {
+				--		pylsp = {
+				--			plugins = {
+				--				pycodestyle = {
+				--					ignore = { "W391" },
+				--					maxLineLength = 100,
+				--				},
+				--			},
+				--		},
+				--	},
+				--},
+				ts_ls = {},
+				lua_ls = {
+					-- cmd = {...},
+					-- filetypes = { ...},
+					-- capabilities = {},
+					settings = {
+						Lua = {
+							completion = {
+								callSnippet = "Replace",
+							},
+							-- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+							-- diagnostics = { disable = { 'missing-fields' } },
+						},
+					},
+				},
 			}
 
-			require("mason").setup()
-
-			-- Make sure these binaries are installed
-			--local ensure_installed = {
-			--	"stylua", -- Used to format Lua code
-			--	--"kotlin-lsp",
-			--}
-
-			--require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-
-			require("mason-lspconfig").setup({
-				handlers = {
-					function(server_name)
-						local server = servers[server_name] or {}
-						-- This handles overriding only values explicitly passed
-						-- by the server configuration above. Useful when disabling
-						-- certain features of an LSP (for example, turning off formatting for tsserver)
-						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-						require("lspconfig")[server_name].setup(server)
-					end,
-				},
-			})
+			-- Set up each server declared above. Overrides in the `servers` table
+			-- are merged over the shared nvim-cmp capabilities.
+			local lspconfig = require("lspconfig")
+			for server_name, server in pairs(servers) do
+				server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+				lspconfig[server_name].setup(server)
+			end
 		end,
 	},
-
-	-- Specific kotlin-lsp setup; see docs at https://github.com/AlexandrosAlexiou/kotlin.nvim
-	--{
-	--	"AlexandrosAlexiou/kotlin.nvim",
-	--	ft = { "kotlin" },
-	--	config = function()
-	--		require("kotlin").setup({
-	--			-- Optional: Specify root markers for multi-module projects
-	--			root_markers = {
-	--				"gradlew",
-	--				".git",
-	--				"mvnw",
-	--				"settings.gradle",
-	--			},
-	--			---- Optional: Specify a custom Java path to run the server
-	--			--jre_path = os.getenv("JDK21"),
-	--			---- Optional: Specify additional JVM arguments
-	--			-- annoying, but java needs a shitload of memory
-	--			jvm_args = {
-	--				"-Xmx8g",
-	--			},
-	--		})
-	--	end,
-	--},
 
 	{ -- Autoformat
 		"stevearc/conform.nvim",
