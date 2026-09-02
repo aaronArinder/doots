@@ -60,21 +60,31 @@ sudo stow --target=/etc/nixos <machine>
 
 ### Add channels
 
-- Add channel: `nix-channel --add <channel-url> <channel-name>`
+⚠️ On darwin, channels belong to **root**, not to your user. nix-darwin 26.05
+activates as root, so root is the one that has to resolve `<darwin>`,
+`<nixpkgs>`, `<unstable>` and `<home-manager>`. User-owned channels fail
+activation with ``can't find `<darwin>`, aborting activation`` even though the
+build succeeded -- the build runs as you, activation doesn't. Your user picks
+root's channels up anyway, since `NIX_PATH` ends in
+`/nix/var/nix/profiles/per-user/root/channels`, so there's no reason to keep a
+second user-owned copy around to drift out of sync.
+
+- Add channel: `sudo nix-channel --add <channel-url> <channel-name>` (drop the `sudo` on the NixOS boxes)
   - Go to the [repo](https://github.com/NixOS/nixpkgs) and find the right release branch name for the target architecture, e.g. `nixpkgs-24.05-darwin` for darwin
-    - For example: `nix-channel --add https://nixos.org/channels/nixpkgs-24.05-darwin nixos`
+    - For example: `sudo nix-channel --add https://nixos.org/channels/nixpkgs-24.05-darwin nixos`
   - Add the main channel and call it `nixos`
   - Add the unstable channel and call it `unstable`
   - Add home-manager
+- Check both lists when activation can't find a channel: `sudo nix-channel --list` should have them all, and `nix-channel --list` should be empty. Remove strays with `nix-channel --remove <name>`.
 
 ### Maintenance
 
-- Update channels: `nix-channel --update`
-- (Optional for darwin) `nix-channel --update darwin`
+- Update channels: `sudo nix-channel --update` (darwin; no `sudo` on NixOS)
 - Darwin: build/activate: `darwin-rebuild switch` (potentially requiring the `--impure` flag)
+  - Run it as yourself, never under `sudo`: it elevates itself for the activation steps, and wrapping the whole thing resets `NIX_PATH` and sends the lookup to `/var/root`
 - Darwin: some machines (eg, eolus) use flakes and these require editing the flake to include the right nixpkgs version
-- Update `nixpkgs` version: `nix-channel --add <new-version-url> nixpkgs`
-- Update `home-manager` version: `nix-channel --add https://github.com/nix-community/home-manager/archive/<RELEASE>.tar.gz home-manager`
+- Update `nixpkgs` version: `sudo nix-channel --add <new-version-url> nixpkgs`
+- Update `home-manager` version: `sudo nix-channel --add https://github.com/nix-community/home-manager/archive/<RELEASE>.tar.gz home-manager`
 - Format: `nixpkgs-fmt ./path/to/file`
 - Garbage collect the store: `nix-collect-garbage` (`-d` to delete old profiles/generations for extra cleanup; see manpage)
 
