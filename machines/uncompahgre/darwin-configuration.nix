@@ -29,7 +29,9 @@ in
       #unstable.vimPlugins.vim-plug
       unstable.vimPlugins.rustaceanvim
       alacritty
-      nerdfonts
+      # The monolithic `nerdfonts` package was split into the nerd-fonts.*
+      # namespace. Only FiraCode is needed -- see packages/alacritty.nix.
+      nerd-fonts.fira-code
       fira-code
       htop
       zsh
@@ -80,9 +82,13 @@ in
     "~/.non-nix-bins/ngrok"
   ];
 
-  # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
+  # nix-darwin >= 25.05 manages nix-daemon unconditionally when nix.enable is
+  # on, so services.nix-daemon.enable no longer exists.
   nix.package = pkgs.nix;
+
+  # As of nix-darwin 25.05 activation runs as root, and the options that used
+  # to apply to whoever ran darwin-rebuild now apply to this user instead.
+  system.primaryUser = global.name.host;
 
   # Necessary for using flakes on this system.
   nix.settings.experimental-features = "nix-command flakes";
