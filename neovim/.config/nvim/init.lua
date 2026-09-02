@@ -465,7 +465,16 @@ require("lazy").setup({
 				-- matching package to home.packages in machines/<host>/ and rebuild.
 				terraformls = {},
 				--nixd = {},
-				--rust_analyzer = {},
+				rust_analyzer = {
+					settings = {
+						["rust-analyzer"] = {
+							-- clippy catches strictly more than `cargo check`, and
+							-- both come from home.packages, so there's no reason to
+							-- run the weaker one on save.
+							check = { command = "clippy" },
+						},
+					},
+				},
 				pyright = {
 					--python = {
 					--	analysis = {
@@ -543,6 +552,7 @@ require("lazy").setup({
 				lua = { "stylua" },
 				-- Conform can also run multiple formatters sequentially
 				python = { "isort", "black" },
+				rust = { "rustfmt" },
 				--
 				-- You can use a sub-list to tell conform to run *until* a formatter
 				-- is found.
@@ -733,6 +743,7 @@ require("lazy").setup({
 				"lua",
 				"luadoc",
 				"markdown",
+				"rust",
 				"vim",
 				"vimdoc",
 				--"hcl",
@@ -766,11 +777,6 @@ require("lazy").setup({
 			--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 		end,
 	},
-	--{
-	--  "mrcjkb/rustaceanvim",
-	--  version = "^5", -- Recommended
-	--  lazy = false, -- This plugin is already lazy
-	--},
 
 	-- require 'kickstart.plugins.debug',
 	-- require 'kickstart.plugins.indent_line',

@@ -5,6 +5,9 @@ return {
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       local lint = require 'lint'
+      -- NOTE: linters, like language servers, are not installed by Neovim.
+      -- Anything listed here needs a matching package in home.packages
+      -- (machines/<host>/) -- markdownlint comes from `markdownlint-cli`.
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
       }
