@@ -77,6 +77,11 @@ vim.opt.scrolloff = 15
 vim.opt.hlsearch = true
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
+-- allow project-local configs
+vim.o.exrc = true
+-- don't run potentially malicious code (no unsafe commands)
+vim.o.secure = true
+
 -- Buffers
 vim.keymap.set("n", "<leader>gb", "<cmd>bprev<CR>", { desc = "[G]o [b]ack to the previous file" })
 vim.keymap.set("n", "<leader>gf", "<cmd>bnext<CR>", { desc = "[G]o [f]orward to the next file" })
@@ -254,11 +259,10 @@ require("lazy").setup({
 			require("telescope").setup({
 				-- You can put your default mappings / updates / etc. in here
 				--  All the info you're looking for is in `:help telescope.setup()`
-				--
 				defaults = {
 					mappings = {
 						i = {
-							["<bs>"] = function(prompt_bufnr)
+							["<C-d>"] = function(prompt_bufnr)
 								local current_picker =
 									require("telescope.actions.state").get_current_picker(prompt_bufnr)
 								local selected_entry = action_state.get_selected_entry()
@@ -494,6 +498,30 @@ require("lazy").setup({
 			})
 		end,
 	},
+
+	-- Specific kotlin-lsp setup; see docs at https://github.com/AlexandrosAlexiou/kotlin.nvim
+	--{
+	--	"AlexandrosAlexiou/kotlin.nvim",
+	--	ft = { "kotlin" },
+	--	config = function()
+	--		require("kotlin").setup({
+	--			-- Optional: Specify root markers for multi-module projects
+	--			root_markers = {
+	--				"gradlew",
+	--				".git",
+	--				"mvnw",
+	--				"settings.gradle",
+	--			},
+	--			---- Optional: Specify a custom Java path to run the server
+	--			--jre_path = os.getenv("JDK21"),
+	--			---- Optional: Specify additional JVM arguments
+	--			-- annoying, but java needs a shitload of memory
+	--			jvm_args = {
+	--				"-Xmx8g",
+	--			},
+	--		})
+	--	end,
+	--},
 
 	{ -- Autoformat
 		"stevearc/conform.nvim",

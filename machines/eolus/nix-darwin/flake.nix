@@ -11,7 +11,7 @@
 
     # Used for user packages and dotfiles
     home-manager = {
-      url = "github:nix-community/home-manager/master";
+      url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows =
         "nixpkgs"; # Use system packages list where available
     };
@@ -36,8 +36,8 @@
           neovim
           git
           alacritty
-          nerdfonts
-          fira-code
+          #nerd-fonts
+          nerd-fonts.fira-code
           htop
           zsh
           oh-my-zsh
@@ -49,8 +49,9 @@
           ripgrep
         ];
 
+
 	# Get some rusty bins into the path
-   	home.sessionPath = [ "$HOME/.cargo/bin" ];
+   	home.sessionPath = [ "$HOME/.cargo/bin" "$HOME/.local/bin" ];
 
     	# The state version is required and should stay at the version you
     	# originally installed.

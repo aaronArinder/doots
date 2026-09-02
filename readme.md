@@ -74,6 +74,7 @@ sudo stow --target=/etc/nixos <machine>
 - Darwin: build/activate: `darwin-rebuild switch` (potentially requiring the `--impure` flag)
 - Darwin: some machines (eg, eolus) use flakes and these require editing the flake to include the right nixpkgs version
 - Update `nixpkgs` version: `nix-channel --add <new-version-url> nixpkgs`
+- Update `home-manager` version: `nix-channel --add https://github.com/nix-community/home-manager/archive/<RELEASE>.tar.gz home-manager`
 - Format: `nixpkgs-fmt ./path/to/file`
 - Garbage collect the store: `nix-collect-garbage` (`-d` to delete old profiles/generations for extra cleanup; see manpage)
 
