@@ -62,6 +62,11 @@
           # nvim-lint linters (linters_by_ft in kickstart/plugins/lint.lua)
           markdownlint-cli
 
+          # nvim-treesitter's main branch builds parsers with the
+          # tree-sitter CLI instead of shipping them, so it has to be on
+          # $PATH. Needs >= 0.26.1, and specifically not the npm build.
+          tree-sitter
+
           # Rust toolchain. rust-analyzer finds the sysroot by shelling out to
           # rustc, and init.lua points its check command at clippy, so neither
           # is optional if diagnostics are meant to work.

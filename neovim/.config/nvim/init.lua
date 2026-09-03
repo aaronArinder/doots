@@ -733,11 +733,23 @@ require("lazy").setup({
 	},
 	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
+		-- The master branch was frozen in Jan 2025 and its query directives
+		-- still read a query match as `capture id -> node`. Neovim 0.11 made
+		-- that `capture id -> node list`, so every directive that resolves a
+		-- language from the buffer -- markdown's fenced-block info string,
+		-- html's <script type=...> -- called `:range()` on a plain table and
+		-- threw. main is the rewrite for 0.11+; it needs Neovim >= 0.12.
+		branch = "main",
+		-- main explicitly does not support lazy-loading.
+		lazy = false,
 		build = ":TSUpdate",
-		opts = {
-			ensure_installed = {
+		config = function()
+			-- Parsers and queries land in stdpath("data")/site, which the
+			-- plugin prepends to runtimepath. Installing is async and a no-op
+			-- for anything already present.
+			require("nvim-treesitter").install({
+				-- what the old ensure_installed list declared
 				"bash",
-				--"c",
 				"diff",
 				"html",
 				"lua",
@@ -746,35 +758,58 @@ require("lazy").setup({
 				"rust",
 				"vim",
 				"vimdoc",
-				--"hcl",
-				--"terraform",
-				--"typescript",
-			},
-			-- Autoinstall languages that are not installed
-			auto_install = true,
-			highlight = {
-				enable = true,
-				-- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-				--  If you are experiencing weird indenting issues, add the language to
-				--  the list of additional_vim_regex_highlighting and disabled languages for indent.
-				additional_vim_regex_highlighting = { "ruby" },
-			},
-			indent = { enable = true, disable = { "ruby" } },
-		},
-		config = function(_, opts)
-			-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 
-			-- Prefer git instead of curl in order to improve connectivity in some environments
-			require("nvim-treesitter.install").prefer_git = true
-			---@diagnostic disable-next-line: missing-fields
-			require("nvim-treesitter.configs").setup(opts)
+				-- languages with an entry in the `servers` table above
+				"javascript",
+				"typescript",
+				"tsx",
+				"python",
+				"terraform",
+				"hcl",
 
-			-- There are additional nvim-treesitter modules that you can use to interact
-			-- with nvim-treesitter. You should go explore a few and see what interests you:
-			--
-			--    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-			--    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-			--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+				-- the formats these dotfiles are actually made of
+				"json",
+				"nix",
+				"toml",
+				"yaml",
+
+				-- injected by the queries for the languages above: markdown
+				-- fences pull markdown_inline, and ecma pulls jsdoc, comment,
+				-- regex and css. master never installed these, which is why
+				-- markdown and typescript were the two that broke.
+				"markdown_inline",
+				"jsdoc",
+				"comment",
+				"regex",
+				"css",
+			})
+
+			-- main hands highlighting back to Neovim: nothing is enabled by
+			-- default. Start it for any filetype whose parser is actually
+			-- installed rather than naming filetypes twice.
+			vim.api.nvim_create_autocmd("FileType", {
+				group = vim.api.nvim_create_augroup("treesitter-start", { clear = true }),
+				callback = function(args)
+					local lang = vim.treesitter.language.get_lang(vim.bo[args.buf].filetype)
+					if not lang then
+						return
+					end
+					-- `language.add` reports a missing or unsafely-named parser
+					-- by *returning* nil plus a message rather than throwing,
+					-- so pcall succeeding proves nothing -- the return value is
+					-- the actual answer. get_lang also falls back to handing
+					-- back the filetype itself, so plugin buffers like
+					-- neo-tree arrive here as a "language".
+					local ok, added = pcall(vim.treesitter.language.add, lang)
+					if not ok or not added then
+						return
+					end
+					vim.treesitter.start(args.buf, lang)
+					-- Treesitter indentation is still flagged experimental
+					-- upstream; it replaces the old indent = { enable = true }.
+					vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+				end,
+			})
 		end,
 	},
 
