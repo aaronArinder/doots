@@ -115,6 +115,23 @@ vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right win
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
+-- `:messages` only stays on screen until the next redraw, which with LSP
+-- and treesitter active can happen within milliseconds -- looks like it
+-- flashes and vanishes. This dumps the same history into a real buffer,
+-- which isn't subject to that.
+vim.api.nvim_create_user_command("Messages", function()
+	local lines = vim.split(vim.fn.execute("messages"), "\n")
+	vim.cmd("botright new")
+	local buf = vim.api.nvim_get_current_buf()
+	vim.bo[buf].buftype = "nofile"
+	vim.bo[buf].bufhidden = "wipe"
+	vim.bo[buf].swapfile = false
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+	vim.bo[buf].modifiable = false
+	vim.api.nvim_buf_set_name(buf, "Messages")
+	vim.keymap.set("n", "q", "<cmd>close<CR>", { buffer = buf, desc = "Close Messages" })
+end, { desc = "Show :messages history in a persistent split" })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -211,7 +228,16 @@ require("lazy").setup({
 	{ -- Fuzzy Finder (files, lsp, etc)
 		"nvim-telescope/telescope.nvim",
 		event = "VimEnter",
-		branch = "0.1.x",
+		-- 0.1.x is frozen (hasn't moved since this pin) and its colorscheme
+		-- picker calls `actions.close:enhance{}`, but `actions.close` isn't
+		-- wrapped with the Action-object methods there (a circular-require
+		-- ordering bug) -- throws "attempt to index field 'close' (a
+		-- function value)" the instant the picker launches, which read as
+		-- the whole window flashing and closing. v0.2.2 is the first
+		-- tagged release past 0.1.x and already carries the rewritten,
+		-- working version of that code path -- a fixed, released point
+		-- rather than tracking master's live tip. Needs Neovim >= 0.11.7.
+		tag = "v0.2.2",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			{ -- If encountering errors, see telescope-fzf-native README for installation instructions
@@ -256,12 +282,34 @@ require("lazy").setup({
 			local action_state = require("telescope.actions.state")
 			local builtin = require("telescope.builtin")
 
+			-- Stamp when each picker's prompt actually opens, so <cr> below can
+			-- tell a real selection from a stray second Enter -- same failure
+			-- as the neo-tree double-<cr> fix: submitting ":Telescope x<CR>"
+			-- and then pressing Enter again out of habit lands the second
+			-- press inside the now-open prompt, which selects the highlighted
+			-- (often just the first/current) entry and closes the picker
+			-- immediately -- looks like the picker flashing shut.
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = "TelescopePrompt",
+				group = vim.api.nvim_create_augroup("telescope-prompt-opened-at", { clear = true }),
+				callback = function(args)
+					vim.b[args.buf].telescope_opened_ns = vim.uv.hrtime()
+				end,
+			})
+
 			require("telescope").setup({
 				-- You can put your default mappings / updates / etc. in here
 				--  All the info you're looking for is in `:help telescope.setup()`
 				defaults = {
 					mappings = {
 						i = {
+							["<cr>"] = function(prompt_bufnr)
+								local opened_ns = vim.b[prompt_bufnr].telescope_opened_ns
+								if opened_ns and (vim.uv.hrtime() - opened_ns) < 200 * 1e6 then
+									return
+								end
+								actions.select_default(prompt_bufnr)
+							end,
 							["<C-d>"] = function(prompt_bufnr)
 								local current_picker =
 									require("telescope.actions.state").get_current_picker(prompt_bufnr)
@@ -515,11 +563,22 @@ require("lazy").setup({
 
 			-- Set up each server declared above. Overrides in the `servers` table
 			-- are merged over the shared nvim-cmp capabilities.
-			local lspconfig = require("lspconfig")
+			--
+			-- `lspconfig[server].setup()` is deprecated as of nvim-lspconfig
+			-- 0.11+ (and prints a warning on every startup that was making
+			-- Neovim's "unacknowledged message" counter stay non-zero, which
+			-- in turn made `:messages` and Telescope's colorscheme picker --
+			-- it messages the current colorscheme on launch -- collide with a
+			-- hit-enter prompt and appear to flash/close instantly). Bare
+			-- `require("lspconfig")` still registers the bundled server
+			-- configs on runtimepath; vim.lsp.config()/vim.lsp.enable() is
+			-- the replacement for actually applying and starting them.
+			require("lspconfig")
 			for server_name, server in pairs(servers) do
 				server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-				lspconfig[server_name].setup(server)
+				vim.lsp.config(server_name, server)
 			end
+			vim.lsp.enable(vim.tbl_keys(servers))
 		end,
 	},
 
